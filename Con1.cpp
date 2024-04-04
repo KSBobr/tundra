@@ -1,50 +1,51 @@
 #include "Con1.h"
-Con1::Con1(int vx, int vy):Obj(1,0)
+Con1::Con1(short int vx, short int vy):Obj(1,0)
 {
     x = vx;
     y = vy;
     vision = 3;
 }
-int Con1::getX() const
+short int Con1::getX() const
 {
     return x;
 }
-int Con1::getY() const
+short int Con1::getY() const
 {
     return y;
 }
-Con1::Con1(int vx, int vy, int vis) :Obj(1,0)
+Con1::Con1(short int vx, short int vy, short int vis) :Obj(1,0)
 {
     x = vx;
     y = vy;
     vision = vis;
 }
-void Con1::iter (int n,int m, std::vector<Obj> *pole,std::vector<int> *pgrass, std::vector<Con1>& C1,int it,std::vector<int> &D)
+void Con1::iter (short int n,short int m, std::vector<Obj> *pole,std::vector<short int> *pgrass, std::vector<Con1>& C1,short int it,std::vector<short int> &D)
 {
-    int minr=vision*vision;
-    int minrp=vision*vision;
-    int dan=vision*vision;
-    int xd,yd;
+    short int minr=vision*vision;
+    short int minrp=vision*vision;
+    short int dan=vision*vision;
+    short int xd,yd;
     bool danger=false;
-    int blx;
-    int blxp;
-    int blyp;
-    int bly;
-    int xes=0;
-    for (int i = x - vision; i <= x + vision; i++) {
-        for (int j = y -vision; j <= y + vision; j++) {
+    short int blx;
+    short int blxp;
+    short int blyp;
+    short int bly;
+    short int xes=0;
+    for (short int i = x - vision; i <= x + vision; i++) {
+        for (short int j = y -vision; j <= y + vision; j++) {
             if (!(i==x and y==j)) {
-                int xi = (n+i)%m;
-                int yj = (m+j)%m;
+                short int xi = (n+i)%n;
+                short int yj = (m+j)%m;
+                short int rol=pole[xi][yj].getRole();
                 //std::cout<<xi<<" "<<yj<<pole[xi][yj].getRole()<<" "<<satiety<<"\n";
-                if (pole[xi][yj].getRole() == 0) {
+                if (rol == 0) {
                     if (minr > abs(x - i) + abs(y - j)) {
                         minr = abs(x - i) + abs(y - j);
                         blx = xi;
                         bly = yj;
                     }
                 }
-                else if (pole[xi][yj].getRole() == 2) {
+                else if (rol == 2) {
                     danger = true;
                     if (dan > abs(x - i) + abs(y - j)) {
                         dan = abs(x - i) + abs(y - j);
@@ -53,7 +54,7 @@ void Con1::iter (int n,int m, std::vector<Obj> *pole,std::vector<int> *pgrass, s
                     }
 
                 }
-                else if (pole[x][y].getAge()>=3 and satiety >= 3 and pole[xi][yj].getRole() == 1) {
+                else if (pole[x][y].getAge()>=3 and satiety >= 3 and rol == 1) {
                     xes = 1;
                     //std::cout<<"ABOBA\n";
                     if (minrp > abs(x - i) + abs(y - j) and pole[xi][yj].getAge()>=3) {
@@ -65,17 +66,18 @@ void Con1::iter (int n,int m, std::vector<Obj> *pole,std::vector<int> *pgrass, s
             }
         }
     }
-    int xn=x;
-    int yn=y;
-    int xs=x;
-    int ys=y;
-    int rod=0;
+
+    short int xn=x;
+    short int yn=y;
+    short int xs=x;
+    short int ys=y;
+    short int rod=0;
     //std::cout<<xes<<" "<<x<<" "<<y<<" "<<minrp<<"\n";
     //std::cout<<x<<" "<<y<<" ";
     if (danger)
     {
-        if (xd<=x) xs=x+1;
-        else if(xd>x) xs=x-1;
+        if (xd<=x) xs=(n+x+1)%n;
+        else if(xd>x) xs=(n+x-1)%n;
     }
     else if (xes and satiety>=3 and minrp<vision*vision)
     {
@@ -104,7 +106,7 @@ void Con1::iter (int n,int m, std::vector<Obj> *pole,std::vector<int> *pgrass, s
     {
         if (minr==1)
         {
-            satiety+=3;
+            satiety+=4;
             pole[blx][bly].die();
             pgrass[blx][bly]=0;
             xs=blx;
@@ -119,7 +121,7 @@ void Con1::iter (int n,int m, std::vector<Obj> *pole,std::vector<int> *pgrass, s
     }
     else
     {
-        int fac=rand()%4;
+        short int fac=rand()%4;
         if (fac==0 and pole[(n+x)%n][(m+y+1)%m].getRole()<=0){ys=(m+y+1)%m;}
         else if(fac==1 and pole[(n+x)%n][(m+y-1)%m].getRole()<=0){ys=(m+y-1)%m;}
         else if(fac==2 and pole[(n+x+1)%n][(m+y)%m].getRole()<=0){xs=(n+x+1)%n;}
@@ -172,7 +174,7 @@ void Con1::iter (int n,int m, std::vector<Obj> *pole,std::vector<int> *pgrass, s
         }
     }
     satiety--;
-    if (satiety<0)
+    if (satiety<0 or pole[x][y].getAge()>20)
     {
         D.push_back(it);
     }
@@ -182,4 +184,5 @@ void Con1::iter (int n,int m, std::vector<Obj> *pole,std::vector<int> *pgrass, s
         pole[xn][yn].setObj(1, 0);
         C1.push_back(Con1(xn, yn));
     }
+    //std::cout<<satiety<<"\n";
 }

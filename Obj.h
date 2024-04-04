@@ -3,21 +3,21 @@
 class Obj
 {
 private:
-    int age=0;
-    int role;
+    short int age=0;
+    short int role=-1;
 public:
     Obj() { role = -1; }
-    Obj(int r, int g)
+    Obj(short int r, short int g)
     {
         role = r;
         age=g;
     }
     ~Obj()=default;
-    int getRole() const
-    {
-        return role;
+    [[nodiscard]] short int getRole() const {
+        short int ro=role;
+        return ro;
     }
-    void setObj(int r,int a)
+    void setObj(short int r, short int a)
     {
         role = r;
         age=a;
@@ -27,14 +27,13 @@ public:
         role = -1;
         age=0;
     }
-    void it(){age++;}
-    int getAge(){return age;}
+    void ageincrease()
+    {
+        age++;
+    }
+    [[nodiscard]] short int getAge() const { return age; }
 };
-/*std::ostream& operator<<(std::ostream& out, const Obj& O)
-{
-	out << O.getRole();
-	return out;
-};*/
+
 
 
 

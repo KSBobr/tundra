@@ -4,16 +4,16 @@
 class Con1 :public Obj
 {
 private:
-    int x=0;
-    int y=0;
-    int vision=3;
-    int satiety=6;
+    short int x=0;
+    short int y=0;
+    short int vision=3;
+    short int satiety=6;
 public:
     Con1():Obj(1,0){};
-    Con1(int vx, int vy);
-    Con1(int vx, int vy, int vis);
-    int getX() const;
-    int getY() const;
-    void iter (int n,int m, std::vector<Obj> *pole,std::vector<int> *pgrass,std::vector<Con1> &C1,int it,std::vector<int>&D);
-    //void do1 (int x, int y,int n,int m, std::vector<Obj> *pole);
+    Con1(short int vx, short int vy);
+    Con1(short int vx, short int vy, short int vis);
+    short int getX() const;
+    short int getY() const;
+    void iter (short int n,short int m, std::vector<Obj> *pole,std::vector<short int> *pgrass,std::vector<Con1> &C1,short int it,std::vector<short int>&D);
+    //void do1 (short int x, short int y,short int n,short int m, std::vector<Obj> *pole);
 };
