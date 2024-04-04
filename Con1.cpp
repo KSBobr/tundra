@@ -19,7 +19,7 @@ Con1::Con1(short int vx, short int vy, short int vis) :Obj(1,0)
     y = vy;
     vision = vis;
 }
-void Con1::iter (short int n,short int m, std::vector<Obj> *pole,std::vector<short int> *pgrass, std::vector<Con1>& C1,short int it,std::vector<short int> &D)
+void Con1::iter (short int n,short int m, std::vector<Obj> *pole,std::vector<short int> *pgrass, std::vector<Con1>& C1,short int it,std::set<short int> &D)
 {
     short int minr=vision*vision;
     short int minrp=vision*vision;
@@ -176,7 +176,7 @@ void Con1::iter (short int n,short int m, std::vector<Obj> *pole,std::vector<sho
     satiety--;
     if (satiety<0 or pole[x][y].getAge()>20)
     {
-        D.push_back(it);
+        D.insert(it);
     }
     //if (it==1) {x=1;y=4;}
     //std::cout<<x<<" "<<y<<"\n";

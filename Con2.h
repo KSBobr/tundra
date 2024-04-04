@@ -15,6 +15,6 @@ public:
     Con2(short int vx, short int vy, short int vis);
     short int getX() const;
     short int getY() const;
-    void iter (short int n,short int m, std::vector<Obj> *pole,std::vector<short int> *pgrass,std::vector<Con2> &C1,short int it,std::vector<short int>&D,std::vector<Con1>& C,std::vector<short int>&Dz);
+    void iter (short int n,short int m, std::vector<Obj> *pole,std::vector<short int> *pgrass,std::vector<Con2> &C1,short int it,std::set<short int>&D,std::vector<Con1>& C,std::set<short int>&Dz);
 
 };

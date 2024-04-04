@@ -21,7 +21,7 @@ Con2::Con2(short int vx, short int vy, short int vis) :Obj(1,0)
     y = vy;
     vision = vis;
 }
-void Con2::iter (short int n,short int m, std::vector<Obj> *pole,std::vector<short int> *pgrass, std::vector<Con2>& C1,short int it,std::vector<short int> &D,std::vector<Con1>& C,std::vector<short int>&Dz)
+void Con2::iter (short int n,short int m, std::vector<Obj> *pole,std::vector<short int> *pgrass, std::vector<Con2>& C1,short int it,std::set<short int> &D,std::vector<Con1>& C,std::set<short int>&Dz)
 {
     short int minr=vision*vision;
     short int minrp=vision*vision;
@@ -109,9 +109,7 @@ void Con2::iter (short int n,short int m, std::vector<Obj> *pole,std::vector<sho
             {
                 if(C[i].getX()==blx and C[i].getY()==bly)
                 {
-                   if(std::find(begin(Dz), end(Dz), i)==end(Dz))
-                       break;
-                   else Dz.push_back(i);
+                   Dz.insert(i);
                 }
             }
             xs=blx;
@@ -193,7 +191,7 @@ void Con2::iter (short int n,short int m, std::vector<Obj> *pole,std::vector<sho
     satiety--;
     if (satiety<0 or pole[x][y].getAge()>40)
     {
-        D.push_back(it);
+        D.insert(it);
     }
     //if (it==1) {x=1;y=4;}
     //std::cout<<x<<" "<<y<<"\n";
