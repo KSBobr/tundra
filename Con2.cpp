@@ -1,11 +1,11 @@
 #include "Con2.h"
 #include "Con1.h"
 #include <algorithm>
-Con2::Con2(short int vx, short int vy):Obj(1,0)
+Con2::Con2(short int vx, short int vy):Obj(2,0)
 {
     x = vx;
     y = vy;
-    vision = 5;
+    vision = 9;
 }
 short int Con2::getX() const
 {
@@ -23,6 +23,7 @@ Con2::Con2(short int vx, short int vy, short int vis) :Obj(1,0)
 }
 void Con2::iter (short int n,short int m, std::vector<Obj> *pole,std::vector<short int> *pgrass, std::vector<Con2>& C1,short int it,std::set<short int> &D,std::vector<Con1>& C,std::set<short int>&Dz)
 {
+    if(C1.size()<40){vision=15;}
     short int minr=vision*vision;
     short int minrp=vision*vision;
     bool danger=false;
@@ -44,7 +45,7 @@ void Con2::iter (short int n,short int m, std::vector<Obj> *pole,std::vector<sho
                         bly = yj;
                     }
                 }
-                else if (pole[x][y].getAge()>=3 and satiety >= 3 and pole[xi][yj].getRole() == 2) {
+                else if (pole[x][y].getAge()>=3 and satiety >= 7 and pole[xi][yj].getRole() == 2) {
                     xes = 1;
                     //std::cout<<"ABOBA\n";
                     if (minrp > abs(x - i) + abs(y - j) and pole[xi][yj].getAge()>=3) {
@@ -98,7 +99,7 @@ void Con2::iter (short int n,short int m, std::vector<Obj> *pole,std::vector<sho
             }
         }
     }
-    else if (minr<vision*vision)
+    else if (minr<vision*vision and satiety<=7 )
     {
         if (minr==1 or minr==2)
         {
@@ -137,10 +138,10 @@ void Con2::iter (short int n,short int m, std::vector<Obj> *pole,std::vector<sho
     else
     {
         short int fac=rand()%4;
-        if (fac==0 and pole[(n+x)%n][(m+y+2)%m].getRole()<=0){ys=(m+y+1)%m;}
-        else if(fac==1 and pole[(n+x)%n][(m+y-2)%m].getRole()<=0){ys=(m+y-1)%m;}
-        else if(fac==2 and pole[(n+x+2)%n][(m+y)%m].getRole()<=0){xs=(n+x+1)%n;}
-        else if(fac==3 and pole[(n+x-2)%n][(m+y)%m].getRole()<=0){xs=(n+x-1)%n;}
+        if (fac==0 and pole[(n+x)%n][(m+y+2)%m].getRole()<=0){ys=(m+y+2)%m;}
+        else if(fac==1 and pole[(n+x)%n][(m+y-2)%m].getRole()<=0){ys=(m+y-2)%m;}
+        else if(fac==2 and pole[(n+x+2)%n][(m+y)%m].getRole()<=0){xs=(n+x+2)%n;}
+        else if(fac==3 and pole[(n+x-2)%n][(m+y)%m].getRole()<=0){xs=(n+x-2)%n;}
     }
     //std::cout<<xs<<" "<<ys<<" "<<pole[xs][ys].getRole()<<"\n";
     if(pole[xs][ys].getRole()<=0) {
@@ -169,7 +170,7 @@ void Con2::iter (short int n,short int m, std::vector<Obj> *pole,std::vector<sho
 
         }
     }
-    else
+    else if(xs==x)
     {
         if(pole[(xs+n+1)%n][ys].getRole()<=0)
         {
@@ -188,15 +189,34 @@ void Con2::iter (short int n,short int m, std::vector<Obj> *pole,std::vector<sho
             y = ys;
         }
     }
+    else
+    {
+        if(pole[(xs+n+1*(xs>x)-1*(xs<x))%n][ys].getRole()<=0)
+        {
+            xs=(xs+n+1*(xs>x)-1*(xs<x))%n;
+            pole[xs][ys]=pole[x][y];
+            pole[x][y].die();
+            x=xs;y=ys;
+        }
+        if(pole[(xs)][(m+ys+1*(ys>y)-1*(ys<y))%m].getRole()<=0)
+        {
+            ys=(m+ys+1*(ys>y)-1*(ys<y))%m;
+            pole[xs][ys]=pole[x][y];
+            pole[x][y].die();
+            x=xs;y=ys;
+        }
+    }
     satiety--;
-    if (satiety<0 or pole[x][y].getAge()>40)
+    if (satiety<0 or (pole[x][y].getAge()>8 and C1.size()>50 or C1.size()<=50 and pole[x][y].getAge()>10 or pole[x][y].getAge()>6 and C1.size()>300 ))
     {
         D.insert(it);
     }
     //if (it==1) {x=1;y=4;}
     //std::cout<<x<<" "<<y<<"\n";
     if(rod) {
+        satiety-=2;
         pole[xn][yn].setObj(2, 0);
         C1.push_back(Con2(xn, yn));
+        //std::cout<<"Vrod\n";
     }
 }

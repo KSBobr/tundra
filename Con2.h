@@ -7,10 +7,10 @@ class Con2 :public Obj
 private:
     short int x=0;
     short int y=0;
-    short int vision=5;
+    short int vision=9;
     short int satiety=12;
 public:
-    Con2():Obj(1,0){};
+    Con2():Obj(2,0){};
     Con2(short int vx, short int vy);
     Con2(short int vx, short int vy, short int vis);
     short int getX() const;

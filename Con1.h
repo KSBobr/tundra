@@ -7,7 +7,7 @@ class Con1 :public Obj
 private:
     short int x=0;
     short int y=0;
-    short int vision=3;
+    short int vision=7;
     short int satiety=6;
 public:
     Con1():Obj(1,0){};

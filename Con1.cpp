@@ -3,7 +3,7 @@ Con1::Con1(short int vx, short int vy):Obj(1,0)
 {
     x = vx;
     y = vy;
-    vision = 3;
+    vision = 7;
 }
 short int Con1::getX() const
 {
@@ -54,10 +54,10 @@ void Con1::iter (short int n,short int m, std::vector<Obj> *pole,std::vector<sho
                     }
 
                 }
-                else if (pole[x][y].getAge()>=3 and satiety >= 3 and rol == 1) {
+                else if (pole[x][y].getAge()>=2 and satiety >= 3 and rol == 1) {
                     xes = 1;
                     //std::cout<<"ABOBA\n";
-                    if (minrp > abs(x - i) + abs(y - j) and pole[xi][yj].getAge()>=3) {
+                    if (minrp > abs(x - i) + abs(y - j) and pole[xi][yj].getAge()>=2) {
                         minrp = abs(x - i) + abs(y - j);
                         blxp = xi;
                         blyp = yj;
@@ -74,12 +74,12 @@ void Con1::iter (short int n,short int m, std::vector<Obj> *pole,std::vector<sho
     short int rod=0;
     //std::cout<<xes<<" "<<x<<" "<<y<<" "<<minrp<<"\n";
     //std::cout<<x<<" "<<y<<" ";
-    if (danger)
+    if (abs(x-xd)+abs(y-yd)<4 or abs(x-xd)+abs(y-yd)<6 and C1.size()<100)
     {
         if (xd<=x) xs=(n+x+1)%n;
         else if(xd>x) xs=(n+x-1)%n;
     }
-    else if (xes and satiety>=3 and minrp<vision*vision)
+    else if (xes and satiety>=2 and minrp<vision*vision)
     {
         if (minrp==1)
         {
@@ -102,7 +102,7 @@ void Con1::iter (short int n,short int m, std::vector<Obj> *pole,std::vector<sho
             ys = (m+ys - (blyp - ys < 0) * 1 + (blyp - ys > 0) * 1)%m;
         }
     }
-    else if (minr<vision*vision)
+    else if (minr<vision*vision and satiety<=4)
     {
         if (minr==1)
         {
@@ -174,13 +174,14 @@ void Con1::iter (short int n,short int m, std::vector<Obj> *pole,std::vector<sho
         }
     }
     satiety--;
-    if (satiety<0 or pole[x][y].getAge()>20)
+    if (satiety<0 or (pole[x][y].getAge()>5 and C1.size()>100 or pole[x][y].getAge()>7 and C1.size()<=100))
     {
         D.insert(it);
     }
     //if (it==1) {x=1;y=4;}
     //std::cout<<x<<" "<<y<<"\n";
-    if(rod) {
+    if(rod and C1.size()<n*m/10*6) {
+        //satiety--;
         pole[xn][yn].setObj(1, 0);
         C1.push_back(Con1(xn, yn));
     }
